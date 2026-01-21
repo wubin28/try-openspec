@@ -1,0 +1,37 @@
+# Change: Add DeepSeek API for Domain-Adaptive Hallucination Reduction
+
+## Why
+
+The current implementation uses static prefix ("你是专家 ") for all prompts, which doesn't adapt to different knowledge domains. Users need a more intelligent optimization that:
+- Dynamically generates domain-specific expert prefixes based on prompt content
+- Uses DeepSeek API to analyze and optimize prompts for unknown/complex queries
+- Clearly differentiates between "common sense query" (static) and "unknown/complex optimization" (AI-powered)
+
+## What Changes
+
+- **NEW**: DeepSeek API integration capability for intelligent prompt optimization
+- **NEW**: Domain-adaptive expert prefix generation (e.g., "你是 AI 辅助软件开发专家" for programming topics)
+- **NEW**: Two distinct buttons: "查询常识" (existing) and "应对未知与复杂" (new)
+- **NEW**: Visual distinction in output area between static and AI-optimized prompts
+- **NEW**: Environment variable configuration for DeepSeek API key (.env file)
+- **NEW**: Error handling with 10-second red-themed toast notifications
+- **NEW**: API-level automated tests using TDD approach (tests written first, run to verify failure)
+
+## Impact
+
+**Affected specs:**
+- `prompt-enhancement` (MODIFIED) - Split into two modes: static and AI-powered
+- `deepseek-integration` (ADDED) - New capability for DeepSeek API
+- `ui-components` (MODIFIED) - Add second button and visual differentiation
+
+**Affected code:**
+- `jianshaoaihuanjue/app/page.tsx` - Add DeepSeek button and handler
+- `jianshaoaihuanjue/.env.local` - New file for API key (NOT committed to git)
+- `jianshaoaihuanjue/.env.example` - Template for API key configuration
+- `jianshaoaihuanjue/__tests__/api/` - New directory for API tests
+- `jianshaoaihuanjue/app/api/optimize/route.ts` - New API endpoint for DeepSeek integration
+- `jianshaoaihuanjue/package.json` - Add testing dependencies (vitest, @testing-library)
+
+**Breaking changes:** None (additive only)
+
+**Migration path:** Not applicable (new feature)
