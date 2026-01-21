@@ -1,63 +1,82 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useRef, useEffect } from 'react';
 
 export default function Home() {
+  const [inputPrompt, setInputPrompt] = useState<string>('');
+  const [enhancedPrompts, setEnhancedPrompts] = useState<string[]>([]);
+  const outputRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleEnhance = () => {
+    if (inputPrompt.trim() === '') return;
+
+    const prefix = '你是专家 ';
+    const suffix = ' 请提供主要观点的3个不同出处的网页链接以便我查验。如果你不知道或查不到,就实说,不要编造';
+    const enhanced = `${prefix}${inputPrompt}${suffix}`;
+
+    setEnhancedPrompts(prev => [...prev, enhanced]);
+    setInputPrompt('');
+
+    // Focus back to textarea for next input
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 150);
+  };
+
+  useEffect(() => {
+    if (enhancedPrompts.length > 0 && outputRef.current) {
+      setTimeout(() => {
+        outputRef.current?.scrollTo({
+          top: outputRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+  }, [enhancedPrompts]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-8">
+      <main className="w-full max-w-4xl">
+        <h1 className="text-2xl sm:text-3xl font-bold text-orange-800 mb-6 text-center">
+          减少 AI 幻觉
+        </h1>
+
+        {enhancedPrompts.length > 0 && (
+          <div
+            ref={outputRef}
+            className="mb-6 max-h-80 overflow-y-auto bg-white rounded-lg border-2 border-orange-200 p-4 space-y-3"
+            role="region"
+            aria-label="增强后的提示词"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            {enhancedPrompts.map((prompt, index) => (
+              <div
+                key={index}
+                className="p-3 bg-orange-50 border border-orange-300 rounded-md text-gray-800 whitespace-pre-wrap"
+              >
+                {prompt}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <textarea
+            ref={textareaRef}
+            value={inputPrompt}
+            onChange={(e) => setInputPrompt(e.target.value)}
+            rows={6}
+            placeholder="请输入您的提示词..."
+            aria-label="输入提示词"
+            className="flex-grow px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 resize-none text-base"
+          />
+          <button
+            onClick={handleEnhance}
+            aria-label="查询常识"
+            className="px-6 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 active:bg-orange-800 transition-colors duration-200 sm:w-auto w-full min-h-[44px] focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
-            Documentation
-          </a>
+            查询常识
+          </button>
         </div>
       </main>
     </div>
