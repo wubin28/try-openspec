@@ -79,6 +79,130 @@ Replace the existing `app/page.tsx` with an interactive single-page application 
 ### No New Files Required
 All functionality can be implemented within existing Next.js structure.
 
+## Acceptance Criteria
+
+### Functional Requirements
+
+**AC-F1: Core User Flow**
+- **GIVEN** a user opens the application
+- **WHEN** they enter a prompt and click "查询常识"
+- **THEN** an enhanced prompt appears with the exact format: `你是专家 {userPrompt} 请提供主要观点的3个不同出处的网页链接以便我查验。如果你不知道或查不到,就实说,不要编造`
+- **AND** the input field is cleared immediately
+- **AND** the output scrolls to show the new enhanced prompt
+
+**AC-F2: Multiple Prompt Enhancement**
+- **GIVEN** a user has generated 3 enhanced prompts
+- **WHEN** they generate a 4th prompt
+- **THEN** all 4 prompts are displayed in chronological order
+- **AND** each prompt is visually distinct and readable
+- **AND** the output area scrolls automatically to the newest prompt
+
+**AC-F3: Input Validation**
+- **GIVEN** the input field is empty or contains only whitespace
+- **WHEN** the user clicks "查询常识"
+- **THEN** no action occurs (no new prompt generated)
+- **AND** no error message is displayed
+
+### Visual & Design Requirements
+
+**AC-V1: Orange Theme Application**
+- **GIVEN** the page is fully loaded
+- **THEN** the primary button uses orange-600 (#EA580C) background
+- **AND** the button hover state uses orange-700 or darker
+- **AND** the title uses orange-800 (#9A3412) or similar dark orange
+- **AND** all text meets WCAG AA contrast ratios (≥4.5:1)
+
+**AC-V2: Typography & Layout**
+- **GIVEN** the page is rendered
+- **THEN** the title "减少 AI 幻觉" is displayed in 2xl (mobile) or 3xl (desktop) font size
+- **AND** Chinese characters render correctly without encoding issues
+- **AND** all text is readable with appropriate font weights and spacing
+
+### Responsive Design Requirements
+
+**AC-R1: Mobile Layout (< 640px)**
+- **GIVEN** viewport width is less than 640px
+- **THEN** the button is positioned below the textarea (vertical stack)
+- **AND** both elements span full container width
+- **AND** the button height is ≥44px (touch-friendly)
+- **AND** no horizontal scrolling occurs
+- **AND** all content remains accessible and readable
+
+**AC-R2: Desktop Layout (≥ 640px)**
+- **GIVEN** viewport width is 640px or greater
+- **THEN** the button is positioned to the right of the textarea (horizontal layout)
+- **AND** the textarea takes approximately 70-80% of the width
+- **AND** the container is horizontally centered with appropriate max-width
+- **AND** padding and spacing are optimized for desktop viewing
+
+### Technical Requirements
+
+**AC-T1: Build & Deployment**
+- **GIVEN** the implementation is complete
+- **WHEN** running `npm run build`
+- **THEN** the build completes successfully with no errors
+- **AND** no TypeScript errors are present
+- **AND** the production build is under reasonable size limits
+
+**AC-T2: Code Quality**
+- **GIVEN** the implementation is complete
+- **WHEN** running `npm run lint`
+- **THEN** ESLint passes with no errors or warnings
+- **AND** all TypeScript types are properly defined
+- **AND** React best practices are followed (hooks rules, key props, etc.)
+
+**AC-T3: Browser Console**
+- **GIVEN** the application is running in development mode
+- **WHEN** performing all user interactions
+- **THEN** no errors appear in the browser console
+- **AND** no warnings appear in the browser console
+- **AND** no React hydration errors occur
+
+### User Experience Requirements
+
+**AC-UX1: Interaction Responsiveness**
+- **GIVEN** a user interacts with any UI element
+- **WHEN** they click the button, type in the textarea, or scroll the output
+- **THEN** the response is immediate (<100ms perceived lag)
+- **AND** smooth transitions are applied (button hover, scroll animations)
+- **AND** visual feedback is clear for all interactions
+
+**AC-UX2: Accessibility**
+- **GIVEN** a user navigates with keyboard only
+- **WHEN** they use Tab key to navigate
+- **THEN** focus moves logically: textarea → button → repeat
+- **AND** focus indicators are clearly visible
+- **AND** all interactive elements are keyboard accessible
+
+**AC-UX3: Edge Case Handling**
+- **GIVEN** various edge case inputs
+- **WHEN** testing with:
+  - Very long prompts (>1000 characters)
+  - Special characters and emoji
+  - Multi-line prompts with line breaks
+  - Rapid consecutive button clicks
+- **THEN** the application handles all cases gracefully without crashes
+- **AND** output remains readable and properly formatted
+
+### Cross-Browser Compatibility
+
+**AC-CB1: Modern Browser Support**
+- **GIVEN** the application is accessed via different browsers
+- **THEN** it functions correctly on:
+  - Chrome/Edge (latest version)
+  - Firefox (latest version)
+  - Safari (latest version)
+- **AND** layout and styling are consistent across browsers
+- **AND** all interactive features work identically
+
+### Metadata & Configuration
+
+**AC-M1: Page Metadata**
+- **GIVEN** the page is loaded
+- **THEN** the browser tab title displays "减少 AI 幻觉"
+- **AND** the HTML lang attribute is set to "zh" or "zh-CN"
+- **AND** meta description describes the tool appropriately
+
 ## Success Criteria
 
 1. ✅ Page displays title "减少 AI 幻觉"
